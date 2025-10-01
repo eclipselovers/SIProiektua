@@ -1,6 +1,10 @@
 package dataAccess;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +30,7 @@ import exceptions.RideMustBeLaterThanTodayException;
 public class DataAccess {
 	private EntityManager db;
 	private EntityManagerFactory emf;
+	private static String donostia = "Donostia";
 
 	ConfigXML c = ConfigXML.getInstance();
 	
@@ -33,18 +38,18 @@ public class DataAccess {
 
 	public DataAccess() {
 		if (c.isDatabaseInitialized()) {
-			String fileName = c.getDbFilename();
+		    String fileName = c.getDbFilename();
+		    Path filePath = Paths.get(fileName);
 
-			File fileToDelete = new File(fileName);
-			if (fileToDelete.delete()) {
-				File fileToDeleteTemp = new File(fileName + "$");
-				fileToDeleteTemp.delete();
-
-				System.out.println("File deleted");
-			} else {
-				System.out.println("Operation failed");
-			}
+		    try {
+		        Files.delete(filePath);
+		        Files.deleteIfExists(Paths.get(fileName + "$"));
+		        System.out.println("File deleted");
+		    } catch (IOException e) {
+		        System.out.println("Operation failed");
+		    }
 		}
+
 		open();
 		if (c.isDatabaseInitialized()) {
 			initializeDB();
@@ -104,11 +109,11 @@ public class DataAccess {
 			cal.set(2024, Calendar.APRIL, 20);
 			Date date4 = UtilDate.trim(cal.getTime());
 
-			driver1.addRide("Donostia", "Madrid", date2, 5, 20); //ride1
-			driver1.addRide("Irun", "Donostia", date2, 5, 2); //ride2
-			driver1.addRide("Madrid", "Donostia", date3, 5, 5); //ride3
+			driver1.addRide(donostia, "Madrid", date2, 5, 20); //ride1
+			driver1.addRide("Irun", donostia, date2, 5, 2); //ride2
+			driver1.addRide("Madrid", donostia, date3, 5, 5); //ride3
 			driver1.addRide("Barcelona", "Madrid", date4, 0, 10); //ride4
-			driver2.addRide("Donostia", "Hondarribi", date1, 5, 3); //ride5
+			driver2.addRide(donostia, "Hondarribi", date1, 5, 3); //ride5
 
 			Ride ride1 = driver1.getCreatedRides().get(0);
 			Ride ride2 = driver1.getCreatedRides().get(1);
@@ -683,20 +688,16 @@ public class DataAccess {
 	public List<Ride> getRidesByDriver(String username) {
 		try {
 			db.getTransaction().begin();
-			TypedQuery<Driver> query = db.createQuery("SELECT d FROM Driver d WHERE d.username = :username",
-					Driver.class);
+			TypedQuery<Driver> query = db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class);
 			query.setParameter("username", username);
 			Driver driver = query.getSingleResult();
-
 			List<Ride> rides = driver.getCreatedRides();
 			List<Ride> activeRides = new ArrayList<>();
-
 			for (Ride ride : rides) {
 				if (ride.isActive()) {
 					activeRides.add(ride);
 				}
 			}
-
 			db.getTransaction().commit();
 			return activeRides;
 		} catch (Exception e) {

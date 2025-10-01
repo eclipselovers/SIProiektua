@@ -2,6 +2,7 @@ package gui;
 
 import java.net.URL;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.swing.UIManager;
 import javax.xml.namespace.QName;
@@ -14,11 +15,13 @@ import businessLogic.BLFacadeImplementation;
 
 public class ApplicationLauncher {
 
+	private static final Logger logger = Logger.getLogger(KotxeaGehituGUI.class.getName());
+	
 	public static void main(String[] args) {
 
 		ConfigXML c = ConfigXML.getInstance();
 
-		System.out.println(c.getLocale());
+		logger.info(c.getLocale());
 
 		Locale.setDefault(new Locale(c.getLocale()));
 
