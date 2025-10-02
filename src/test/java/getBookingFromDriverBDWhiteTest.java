@@ -3,6 +3,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +14,8 @@ import domain.Booking;
 import domain.Ride;
 
 public class getBookingFromDriverBDWhiteTest {
-	protected  DataAccess  db = new DataAccess();
+	protected  EntityManager et;
+	protected  DataAccess  db = new DataAccess(et);
 	
 	public getBookingFromDriverBDWhiteTest() {
 		db.open();

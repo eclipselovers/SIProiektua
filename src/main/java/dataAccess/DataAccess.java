@@ -645,7 +645,7 @@ public class DataAccess {
 			db.getTransaction().commit();
 			return bookings;
 		} catch (Exception e) {
-			e.printStackTrace();
+		//	e.printStackTrace();
 			db.getTransaction().rollback();
 			return null;
 		}

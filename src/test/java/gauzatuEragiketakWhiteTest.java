@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import javax.persistence.EntityManager;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +13,8 @@ import org.junit.Test;
 import dataAccess.DataAccess;
 
 public class gauzatuEragiketakWhiteTest {
-	protected  DataAccess  db = new DataAccess();
+	protected  EntityManager et;
+	protected  DataAccess  db = new DataAccess(et);
 	
 	public gauzatuEragiketakWhiteTest() {
 		db.open();
