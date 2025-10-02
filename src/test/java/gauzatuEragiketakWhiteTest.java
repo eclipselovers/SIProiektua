@@ -1,13 +1,13 @@
 
 import static org.junit.Assert.assertFalse;
 
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import javax.persistence.EntityManager;
 
-import org.junit.After;
-import org.junit.Before;
+
 import org.junit.Test;
 
 import dataAccess.DataAccess;
@@ -18,18 +18,18 @@ public class gauzatuEragiketakWhiteTest {
 	
 	public gauzatuEragiketakWhiteTest() {
 		db.open();
+		db.addDriver("Proba", "123456");
+		db.close();
 	}
 	
-	@Before
-	public void setUp() {
-		db.addDriver("Proba", "123456");
-		
-	}
+	
 
 	@Test
 	public void test1() {
 		boolean r = false;
+		db.open();
 		r = db.gauzatuEragiketa(null, 0, true);
+		db.close();
 		assertFalse(r);
 	}
 	
@@ -37,7 +37,9 @@ public class gauzatuEragiketakWhiteTest {
 	public void test2() {
 		try {
 			boolean r1 = false;
+			db.open();
 			r1 = db.gauzatuEragiketa("Proba", 0, false);
+			db.close();
 			assertTrue(r1);
 		}catch(Exception e1) {
 			fail();
@@ -48,7 +50,9 @@ public class gauzatuEragiketakWhiteTest {
 	public void test3() {
 		try {
 			boolean r2 = false;
+			db.open();
 			r2 = db.gauzatuEragiketa("Proba", 0, true);
+			db.close();
 			assertTrue(r2);
 		}catch(Exception e1) {
 			fail();
@@ -59,16 +63,13 @@ public class gauzatuEragiketakWhiteTest {
 	public void test4() {
 		try {
 			boolean r = false;
+			db.open();
 			r = db.gauzatuEragiketa("Proba", 1000, false);
+			db.close();
 			assertTrue(r);
 		}catch(Exception e1) {
 			fail();
 		}
 	}
 	
-	@After
-	public void tearDown() {
-		db.close();
-	}
-
 }
