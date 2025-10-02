@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -75,6 +76,8 @@ public class GetRidesByDriverBlackMockTest {
 	// Username "null" da. Null bueltatu
 	public void test1() {
 		try {
+			Mockito.when(db.createQuery("SELECT t FROM Driver t WHERE t.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(null));
 			when(queryMock.setParameter(eq("username"), eq(null))).thenReturn(queryMock);
 			when(queryMock.getSingleResult()).thenReturn(null);
 			List<Ride> erantzuna = sut.getRidesByDriver(null);
@@ -88,8 +91,8 @@ public class GetRidesByDriverBlackMockTest {
 	// Ez dago "EzUrtzi" izeneko driverra. Null bueltatu
 	public void test2() {
 		try {
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(null);
+			Mockito.when(db.createQuery("SELECT t FROM Driver t WHERE t.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(null));
 			List<Ride> erantzuna = sut.getRidesByDriver("EzUrtzi");
 			assertNull(erantzuna);
 		} catch (Exception e) {
@@ -102,8 +105,8 @@ public class GetRidesByDriverBlackMockTest {
 	public void test3() {
 		try {
 			Driver driverUrtzi = new Driver("Urtzi", "123");
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
+			Mockito.when(db.createQuery("SELECT t FROM Driver t WHERE t.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(driverUrtzi));
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				assertTrue(true);
@@ -111,7 +114,7 @@ public class GetRidesByDriverBlackMockTest {
 				fail();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			fail();
 		}
 	}
@@ -128,8 +131,8 @@ public class GetRidesByDriverBlackMockTest {
 				ride.setActive(false);
 			}
 			
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
+			Mockito.when(db.createQuery("SELECT t FROM Driver t WHERE t.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(driverUrtzi));
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				assertTrue(true);
@@ -152,8 +155,8 @@ public class GetRidesByDriverBlackMockTest {
 			Date date = new Date();
 			driverUrtzi.addRide("Donosti", "Bilbao", date, 4, 5);
 			
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
+			Mockito.when(db.createQuery("SELECT t FROM Driver t WHERE t.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(driverUrtzi));
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				fail();

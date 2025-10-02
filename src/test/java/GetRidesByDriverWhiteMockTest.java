@@ -90,7 +90,7 @@ public class GetRidesByDriverWhiteMockTest {
 	public void test2() {
 		try {
 			Driver driverUrtzi = new Driver("Urtzi", "123");
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
+			when(queryMock.setParameter(eq("username"), eq("Urtzi"))).thenReturn(queryMock);
 			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
@@ -116,7 +116,7 @@ public class GetRidesByDriverWhiteMockTest {
 				ride.setActive(false);
 			}
 			
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
+			when(queryMock.setParameter(eq("username"), eq("Urtzi"))).thenReturn(queryMock);
 			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
@@ -140,7 +140,7 @@ public class GetRidesByDriverWhiteMockTest {
 			Date date = new Date();
 			driverUrtzi.addRide("Donosti", "Bilbao", date, 4, 5);
 			
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
+			when(queryMock.setParameter(eq("username"), eq("Urtzi"))).thenReturn(queryMock);
 			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
