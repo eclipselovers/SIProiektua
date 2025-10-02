@@ -76,8 +76,9 @@ public class GetRidesByDriverWhiteMockTest {
 	// Ez dago "EzUrtzi" izeneko driverra. Null bueltatu
 	public void test1() {
 		try {
-			when(queryMock.setParameter(eq("username"), eq("EzUrtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(null);
+			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(null);
 			List<Ride> erantzuna = sut.getRidesByDriver("EzUrtzi");
 			assertNull(erantzuna);
 		} catch (Exception e) {
@@ -90,8 +91,9 @@ public class GetRidesByDriverWhiteMockTest {
 	public void test2() {
 		try {
 			Driver driverUrtzi = new Driver("Urtzi", "123");
-			when(queryMock.setParameter(eq("username"), eq("Urtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
+			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				assertTrue(true);
@@ -116,8 +118,9 @@ public class GetRidesByDriverWhiteMockTest {
 				ride.setActive(false);
 			}
 			
-			when(queryMock.setParameter(eq("username"), eq("Urtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
+			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				assertTrue(true);
@@ -140,8 +143,9 @@ public class GetRidesByDriverWhiteMockTest {
 			Date date = new Date();
 			driverUrtzi.addRide("Donosti", "Bilbao", date, 4, 5);
 			
-			when(queryMock.setParameter(eq("username"), eq("Urtzi"))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
+			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				fail();

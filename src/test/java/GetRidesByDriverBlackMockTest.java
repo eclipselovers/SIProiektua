@@ -1,4 +1,3 @@
-
 import dataAccess.DataAccess;
 import domain.Driver;
 import domain.Ride;
@@ -34,9 +33,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public class GetRidesByDriverBlackMockTest {
+	
 	static DataAccess sut;
 	
-	protected MockedStatic <Persistence> persistenceMock;
+	protected MockedStatic<Persistence> persistenceMock;
 
 	@Mock
 	protected  EntityManagerFactory entityManagerFactory;
@@ -78,9 +78,9 @@ public class GetRidesByDriverBlackMockTest {
 		try {
 			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
 			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(null));
-			when(queryMock.setParameter(eq("username"), eq(null))).thenReturn(queryMock);
-			when(queryMock.getSingleResult()).thenReturn(null);
+			sut.open();
 			List<Ride> erantzuna = sut.getRidesByDriver(null);
+			sut.close();
 			assertNull(erantzuna);
 		} catch (Exception e) {
 			fail();
@@ -93,7 +93,9 @@ public class GetRidesByDriverBlackMockTest {
 		try {
 			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
 			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(null));
+			sut.open();
 			List<Ride> erantzuna = sut.getRidesByDriver("EzUrtzi");
+			sut.close();
 			assertNull(erantzuna);
 		} catch (Exception e) {
 			fail();
@@ -106,7 +108,8 @@ public class GetRidesByDriverBlackMockTest {
 		try {
 			Driver driverUrtzi = new Driver("Urtzi", "123");
 			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
-			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(driverUrtzi));
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				assertTrue(true);
@@ -132,7 +135,8 @@ public class GetRidesByDriverBlackMockTest {
 			}
 			
 			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
-			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(driverUrtzi));
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				assertTrue(true);
@@ -156,7 +160,8 @@ public class GetRidesByDriverBlackMockTest {
 			driverUrtzi.addRide("Donosti", "Bilbao", date, 4, 5);
 			
 			Mockito.when(db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class)).thenReturn(queryMock);
-			Mockito.when(queryMock.getResultList()).thenReturn(Collections.singletonList(driverUrtzi));
+			Mockito.when(queryMock.setParameter("username", "Urtzi")).thenReturn(queryMock);
+			Mockito.when(queryMock.getSingleResult()).thenReturn(driverUrtzi);
 			List<Ride> ridesResult = sut.getRidesByDriver("Urtzi");
 			if (ridesResult.isEmpty() == true) {
 				fail();
