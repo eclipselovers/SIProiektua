@@ -690,9 +690,6 @@ public class DataAccess {
 			TypedQuery<Driver> query = db.createQuery("SELECT d FROM Driver d WHERE d.username = :username", Driver.class);
 			query.setParameter("username", username);
 			Driver driver = query.getSingleResult();
-			System.out.println("RidesOpen");
-			System.out.println(driver);
-			System.out.println("RidesClose");
 			List<Ride> rides = driver.getCreatedRides();
 			List<Ride> activeRides = new ArrayList<>();
 			for (Ride ride : rides) {
