@@ -1,4 +1,4 @@
-//Update
+
 import domain.Driver;
 import domain.Ride;
 
@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
+import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
@@ -20,7 +20,8 @@ import configuration.UtilDate;
 import dataAccess.DataAccess;
 
 public class GetRidesByDriverWhiteTest {
-protected  DataAccess  db = new DataAccess();
+	protected EntityManager et;
+	protected  DataAccess  db = new DataAccess(et);
 		
 	@Test
 	// Ez dago "EzUrtzi" izeneko driverra. Null bueltatu
@@ -68,7 +69,7 @@ protected  DataAccess  db = new DataAccess();
 			cal.set(2026, Calendar.MAY, 20);
 			Date date = UtilDate.trim(cal.getTime());
 			Ride ride = db.createRide("Donosti", "Bilbao", date, 4, 5, "Urtzii");
-			db.cancelRide(ride);	
+			ride.setActive(false);
 
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
 			
@@ -102,7 +103,7 @@ protected  DataAccess  db = new DataAccess();
 
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
 			
-			if (erantzuna.isEmpty() == true) {
+			if (erantzuna.isEmpty() == false) {
 				assertTrue(true);
 			} else {
 				fail();

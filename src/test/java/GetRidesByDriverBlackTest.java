@@ -1,4 +1,4 @@
-//Update
+
 import domain.Driver;
 import domain.Ride;
 
@@ -82,7 +82,7 @@ public class GetRidesByDriverBlackTest {
 			cal.set(2026, Calendar.MAY, 20);
 			Date date = UtilDate.trim(cal.getTime());
 			Ride ride = db.createRide("Donosti", "Bilbao", date, 4, 5, "Urtzii");
-			db.cancelRide(ride);	
+			ride.setActive(false);
 
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
 			
@@ -115,8 +115,8 @@ public class GetRidesByDriverBlackTest {
 			db.createRide("Donosti", "Bilbao", date, 4, 5, "Urtzii");
 
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
-			
-			if (erantzuna.isEmpty() == true) {
+
+			if (erantzuna.isEmpty() == false) {
 				assertTrue(true);
 			} else {
 				fail();
