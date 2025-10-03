@@ -13,17 +13,13 @@ import domain.Traveler;
 
 public class BookRideBDBWhiteTest {
 
-	protected  EntityManager et;
+	protected EntityManager et;
 	protected  DataAccess  db = new DataAccess(et);
 	
 	public BookRideBDBWhiteTest() {
-		db.open();
-		et.getTransaction().begin();
-		Traveler traveler = new Traveler("Proba", "123456");
-		traveler.setMoney(1000);
-		et.merge(traveler);
-		et.getTransaction().commit();
-		db.close();
+	      db.open();
+	      db.addTraveler("Proba", "22456");
+	      db.close();
 	}
 	
 	
@@ -31,42 +27,63 @@ public class BookRideBDBWhiteTest {
 	@Test
 	public void test1() {
 		boolean r = false;
-		Driver d = new Driver("Proba", "struy54");
+		Driver d = new Driver("a", "struy54");
 		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
 		db.open();
 		r = db.bookRide(null, ride, 1, 1.1);
 		db.close();
 		assertFalse(r);
 	}
-
+	
 	@Test
 	public void test2() {
-		boolean r2 = false;
-		db.open();
-		r2 = db.bookRide("Proba", null, 1, 1.1);
-		db.close();
-		assertFalse(r2);
+	    db.open();
+	    boolean r2 = db.bookRide("Proba", null, 1, 1.1);
+	    db.close();
+	    assertFalse(r2);  
 	}
+
+
 	
 	@Test
 	public void test3() {
-		Driver d = new Driver("Proba", "struy54");
+		Driver d = new Driver("a", "struy54");
 		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
 		boolean r3 = false;
 		db.open();
-		r3 = db.bookRide("Proba", ride, 3, 1.1);
+		Traveler t = db.getTraveler("Proba");
+		t.setMoney(0);
+		db.updateTraveler(t);
+		r3 = db.bookRide("Proba", ride, 1, 1.1);
 		db.close();
 		assertFalse(r3);
 	}
 	
 	@Test
 	public void test4() {
-		Driver d = new Driver("Proba", "struy54");
+		Driver d = new Driver("a", "struy54");
 		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
-		boolean r3 = false;
+		boolean r4 = false;
 		db.open();
-		r3 = db.bookRide("Proba", ride, 1, 1.1);
+		r4 = db.bookRide("Proba", ride, 45, 1.1);
 		db.close();
-		assertFalse(r3);
+		assertFalse(r4);
 	}
+	
+	@Test
+	public void test5() {
+		db.open();
+		Traveler t = db.getTraveler("Proba");
+		t.setMoney(1000*0);
+		db.updateTraveler(t);
+	    db.close();
+	    Driver d = new Driver("a", "struy54");
+	    Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
+	    boolean r5 = false;
+	    db.open();
+	    r5 = db.bookRide("Proba", ride, 1, 1.1);
+	    db.close();
+	    assertFalse(r5);
+	}
+
 }
