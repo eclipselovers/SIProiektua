@@ -11,12 +11,12 @@ import domain.Driver;
 import domain.Ride;
 import domain.Traveler;
 
-public class BookRideBDBWhiteTest {
+public class BookRideBDWhiteTest {
 
 	protected EntityManager et;
 	protected  DataAccess  db = new DataAccess(et);
 	
-	public BookRideBDBWhiteTest() {
+	public BookRideBDWhiteTest() {
 	      db.open();
 	      db.addTraveler("Proba", "22456");
 	      db.close();
