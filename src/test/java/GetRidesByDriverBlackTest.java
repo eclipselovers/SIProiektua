@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
+import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
@@ -20,7 +20,8 @@ import configuration.UtilDate;
 import dataAccess.DataAccess;
 
 public class GetRidesByDriverBlackTest {
-protected  DataAccess  db = new DataAccess();
+	protected EntityManager et;
+	protected  DataAccess  db = new DataAccess(et);
 	
 	@Test
 	// Username "null" da. Null bueltatu
