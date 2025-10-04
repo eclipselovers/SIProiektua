@@ -17,7 +17,7 @@ public class BookRideBDBlackTest {
 	
 	public BookRideBDBlackTest() {
 	      db.open();
-	      db.addTraveler("Proba", "22456");
+	      db.addTraveler("Traveler Test", "22456");
 	      db.close();
 	}
 	
@@ -37,7 +37,7 @@ public class BookRideBDBlackTest {
 	@Test
 	public void test2() {
 	    db.open();
-	    boolean r2 = db.bookRide("Proba", null, 1, 1.1);
+	    boolean r2 = db.bookRide("Traveler Test", null, 1, 1.1);
 	    db.close();
 	    assertFalse(r2);  
 	}
@@ -48,14 +48,15 @@ public class BookRideBDBlackTest {
 	public void test3() {
 		Driver d = new Driver("a", "struy54");
 		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
-		boolean r3 = false;
-		db.open();
-		Traveler t = db.getTraveler("Proba");
-		t.setMoney(0);
-		db.updateTraveler(t);
-		r3 = db.bookRide("Proba", ride, 1, 1.1);
-		db.close();
-		assertFalse(r3);
+		try {
+			db.open();
+			db.bookRide("Traveler Test", ride, -1, 1.1);
+			db.close();
+			fail();
+		} catch (Exception e) {
+			assertFalse(false);
+		}
+	
 	}
 	
 	@Test
@@ -64,7 +65,7 @@ public class BookRideBDBlackTest {
 		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
 		boolean r4 = false;
 		db.open();
-		r4 = db.bookRide("Proba", ride, 45, 1.1);
+		r4 = db.bookRide("Traveler Test", ride, 45, 1.1);
 		db.close();
 		assertFalse(r4);
 	}
@@ -72,17 +73,43 @@ public class BookRideBDBlackTest {
 	@Test
 	public void test5() {
 		db.open();
-		Traveler t = db.getTraveler("Proba");
-		t.setMoney(1000*0);
-		db.updateTraveler(t);
+		Traveler t = db.getTraveler("Traveler Test");
+		t.setMoney(1000);
 	    db.close();
 	    Driver d = new Driver("a", "struy54");
 	    Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
 	    boolean r5 = false;
 	    db.open();
-	    r5 = db.bookRide("Proba", ride, 1, 1.1);
+	    r5 = db.bookRide("Traveler Test", ride, 1, 1.1);
 	    db.close();
 	    assertFalse(r5);
+	}
+	
+	@Test
+	public void test6() {
+		Driver d = new Driver("a", "struy54");
+		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
+		boolean r4 = false;
+		db.open();
+		r4 = db.bookRide("Test", ride, 1, 1.1);
+		db.close();
+		assertFalse(r4);
+	}
+	
+	@Test
+	public void test7() {
+		Driver d = new Driver("a", "struy54");
+		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
+		boolean r4 = false;
+		try {
+			db.open();
+			r4 = db.bookRide("Traveler Test", ride, 1, -1.1);
+			db.close();
+			assertFalse(r4);	
+		} catch (Exception e) {
+			assertTrue(true);
+		}
+		
 	}
 
 }
