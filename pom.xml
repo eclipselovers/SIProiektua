@@ -27,6 +27,10 @@
 <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
+    <sonar.organization>eclipselovers</sonar.organization>
+	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	<sonar.projectKey>eclipselovers_rides25-junit-mockito</sonar.projectKey>
+	<sonar.login>f513adab078c02ee536706edb01c68ac68f8d4d0</sonar.login>
 </properties>
 
 <!-- https://mvnrepository.com/artifact/junit/junit -->
