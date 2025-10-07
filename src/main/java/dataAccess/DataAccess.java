@@ -503,6 +503,7 @@ public class DataAccess {
 			db.getTransaction().commit();
 			return false;
 		} catch (Exception e) {
+			e.printStackTrace();
 			db.getTransaction().rollback();
 			return false;
 		}
