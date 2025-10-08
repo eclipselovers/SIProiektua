@@ -87,15 +87,13 @@ static DataAccess sut;
 	
 	@Test
 	public void test3() {
-		try {
-			Driver d = new Driver("a", "struy54");
-			Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
-			Mockito.when(query.getSingleResult()).thenReturn(user);
-			sut.bookRide("Traveler Test", ride, -1, 1.1);
-			fail();
-		} catch (Exception e) {
-			assertFalse(false);
-		}
+		boolean res = false;
+		Driver d = new Driver("a", "struy54");
+		Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
+		Mockito.when(query.getSingleResult()).thenReturn(user);
+		res = sut.bookRide("Traveler Test", ride, -1, 1.1);
+		assertFalse(res);
+		
 	}
 	
 	@Test
@@ -132,15 +130,12 @@ static DataAccess sut;
 	}
 		@Test
 		public void test7() {
-			try {
-				Driver d = new Driver("a", "struy54");
-				Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
-				Mockito.when(query.getSingleResult()).thenReturn(user);
-				sut.bookRide("Traveler Test", ride, 1, -1.1);
-				fail();
-			} catch (Exception e) {
-				assertFalse(false);
-			}
+			boolean res = false;
+			Driver d = new Driver("a", "struy54");
+			Ride ride = new Ride("Donosti", "Zarautz", new Date("12/12/2025"), 2, 4.0, d);
+			Mockito.when(query.getSingleResult()).thenReturn(user);
+			res = sut.bookRide("Traveler Test", ride, 1, -1.1);
+			assertFalse(res);
 		}
 		
 }
