@@ -501,19 +501,18 @@ public class DataAccess {
 //		}
 //	}
 	
-	public <T> boolean addUser(String username, String password, Class<T> mota) {
-		try {
-			db.getTransaction().begin();
-			if (!isUsernameAvailable(username)) return false;
-			
-			persistNewUser(username, password, mota);
-			db.getTransaction().commit();
-			return true;
-		}catch(Exception e) {
-			db.getTransaction().rollback();
-			return false;
-		}
-	}
+	public <T> boolean addUser(String username, String password, Class<T> mota) { 
+		try { 
+			db.getTransaction().begin(); 
+			if (!isUsernameAvailable(username)) return false; 
+			persistNewUser(username, password, mota); 
+			db.getTransaction().commit(); 
+			return true; 
+		}catch(Exception e) { 
+			db.getTransaction().rollback(); 
+			return false; 
+		} 
+	} 
 	
 	private <T> void persistNewUser(String username, String password, Class<T> mota) throws Exception { 
 		Constructor<T> constr = mota.getConstructor(String.class, String.class);
@@ -525,21 +524,21 @@ public class DataAccess {
 	    return getDriver(username) == null && getTraveler(username) == null; 
 	} 
 
-	public boolean gauzatuEragiketa(String username, double amount, boolean deposit) {
-		try {
-			db.getTransaction().begin();
-			User user = getUser(username);
-			if (user != null) {
-				return diruMugimenduak(user, amount, deposit);
-			}
-			db.getTransaction().commit();
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
-	}
+	public boolean gauzatuEragiketa(String username, double amount, boolean deposit) { 
+		try { 
+			db.getTransaction().begin(); 
+			User user = getUser(username); 
+			if (user != null) { 
+				return diruMugimenduak(user, amount, deposit); 
+			} 
+			db.getTransaction().commit(); 
+			return false; 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+			db.getTransaction().rollback(); 
+			return false; 
+		} 
+	} 
 	
 	public boolean diruMugimenduak(User user, double amount, boolean deposit) {
 		double currentMoney = user.getMoney();
@@ -667,38 +666,30 @@ public class DataAccess {
 		return trav.getBookedRides();
 	}
 
-	public void updateTraveler(Traveler traveler) {
-		try {
-			db.getTransaction().begin();
-			db.merge(traveler);
-			db.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-		}
-	}
+	public <T> boolean updateEntity(T entity) { 
+		try { 
+			db.getTransaction().begin(); 
+			db.merge(entity); 
+			db.getTransaction().commit(); 
+			return true; 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+			db.getTransaction().rollback(); 
+			return false; 
+		} 
+	} 
 
-	public void updateDriver(Driver driver) {
-		try {
-			db.getTransaction().begin();
-			db.merge(driver);
-			db.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-		}
-	}
-
-	public void updateUser(User user) {
-		try {
-			db.getTransaction().begin();
-			db.merge(user);
-			db.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-		}
-	}
+	public void updateTraveler(Traveler traveler) { 
+		updateEntity(traveler); 
+	} 
+	
+	public void updateDriver(Driver driver) { 
+		updateEntity(driver); 
+	} 
+ 
+	public void updateUser(User user) { 
+		updateEntity(user); 
+	} 
 
 	public List<Booking> getPastBookedRides(String username) {
 		TypedQuery<Booking> query = db.createQuery(
@@ -824,21 +815,19 @@ public class DataAccess {
 		return era;
 	}
 
-	public boolean erreklamazioaBidali(String nor, String nori, Date gaur, Booking booking, String textua,
-			boolean aurk) {
-		try {
-			db.getTransaction().begin();
-
-			Complaint erreklamazioa = new Complaint(nor, nori, gaur, booking, textua, aurk);
-			db.persist(erreklamazioa);
-			db.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
-	}
+	public boolean erreklamazioaBidali(ComplaintData data) { 
+		try { 
+			db.getTransaction().begin(); 
+			Complaint erreklamazioa = new Complaint(data.getSender(), data.getReceiver(), data.getDate(), data.getBooking(), data.getText(), data.isAurk()); 
+			db.persist(erreklamazioa); 
+			db.getTransaction().commit(); 
+			return true; 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+			db.getTransaction().rollback(); 
+			return false; 
+		} 
+	} 
 
 	public void updateComplaint(Complaint erreklamazioa) {
 		try {
@@ -950,47 +939,66 @@ public class DataAccess {
 		return query.getResultList();
 	}
 
-	public void deleteUser(User us) {
-		try {
-			if (us.getMota().equals("Driver")) {
-				List<Ride> rl = getRidesByDriver(us.getUsername());
-				if (rl != null) {
-					for (Ride ri : rl) {
-						cancelRide(ri);
-					}
-				}
-				Driver d = getDriver(us.getUsername());
-				List<Car> cl = d.getCars();
-				if (cl != null) {
-					for (int i = cl.size() - 1; i >= 0; i--) {
-						Car ci = cl.get(i);
-						deleteCar(ci);
-					}
-				}
-			} else {
-				List<Booking> lb = getBookedRides(us.getUsername());
-				if (lb != null) {
-					for (Booking li : lb) {
-						li.setStatus("Rejected");
-						li.getRide().setnPlaces(li.getRide().getnPlaces() + li.getSeats());
-					}
-				}
-				List<Alert> la = getAlertsByUsername(us.getUsername());
-				if (la != null) {
-					for (Alert lx : la) {
-						deleteAlert(lx.getAlertNumber());
-					}
-				}
-			}
-			db.getTransaction().begin();
-			us = db.merge(us);
-			db.remove(us);
-			db.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public void deleteUser(User us) { 
+		try { 
+			if (us.getMota().equals("Driver")) { 
+				deleteDriverUser(us); 
+			} else { 
+				deleteTravelerUser(us); 
+			} 
+			removeUserFromDatabase(us); 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+		} 
+	} 
 
+	private void deleteDriverUser(User user) { 
+		String username = user.getUsername(); 
+		List<Ride> rides = getRidesByDriver(username); 
+		if (rides != null) { 
+			for (Ride ride : rides) { 
+					cancelRide(ride); 
+			} 
+		} 
+		Driver driver = getDriver(username); 
+		List<Car> cars = driver.getCars(); 
+			if (cars != null) { 
+				for (int i = cars.size() - 1; i >= 0; i--) { 
+					deleteCar(cars.get(i)); 
+				} 
+			} 
+	} 
+
+		 
+	private void deleteTravelerUser(User user) { 
+		String username = user.getUsername(); 
+		List<Booking> bookings = getBookedRides(username); 
+		if (bookings != null) { 
+			for (Booking booking : bookings) { 
+				rejectBooking(booking); 
+			} 
+		} 
+		List<Alert> alerts = getAlertsByUsername(username); 
+		if (alerts != null) { 
+			for (Alert alert : alerts) { 
+				deleteAlert(alert.getAlertNumber()); 
+			} 
+		} 
+	} 
+
+	private void rejectBooking(Booking booking) { 
+		booking.setStatus("Rejected"); 
+		Ride ride = booking.getRide(); 
+		ride.setnPlaces(ride.getnPlaces() + booking.getSeats()); 
+	} 
+
+	private void removeUserFromDatabase(User user) { 
+		db.getTransaction().begin(); 
+		user = db.merge(user); 
+		db.remove(user); 
+		db.getTransaction().commit(); 
+} 
+	
 	public List<Alert> getAlertsByUsername(String username) {
 		try {
 			db.getTransaction().begin();
@@ -1038,37 +1046,32 @@ public class DataAccess {
 
 	}
 
-	public boolean updateAlertaAurkituak(String username) {
-		try {
-			db.getTransaction().begin();
+	public boolean updateAlertaAurkituak(String username) { 
+		try { 
+			db.getTransaction().begin(); 
+			boolean alertFound = false; 
+			TypedQuery<Alert> alertQuery = db.createQuery("SELECT a FROM Alert a WHERE a.traveler.username = :username", Alert.class); 
+			alertQuery.setParameter("username", username); 
+			List<Alert> alerts = alertQuery.getResultList();  
+			TypedQuery<Ride> rideQuery = db.createQuery("SELECT r FROM Ride r WHERE r.date > CURRENT_DATE AND r.active = true", Ride.class); 
+			List<Ride> rides = rideQuery.getResultList(); 		 
+				for (Alert alert : alerts) { 
+					boolean found = findAlerts(rides, alert); 
+					alert.setFound(found);	 
+					if (alert.isActive() && found) 
+						alertFound = true; 		
+						db.merge(alert);
+					} 	 
+				db.getTransaction().commit(); 
+				return alertFound; 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+			db.getTransaction().rollback(); 
+			return false; 
+		} 
+	} 
 
-			boolean alertFound = false;
-			TypedQuery<Alert> alertQuery = db.createQuery("SELECT a FROM Alert a WHERE a.traveler.username = :username",
-					Alert.class);
-			alertQuery.setParameter("username", username);
-			List<Alert> alerts = alertQuery.getResultList();
-
-			TypedQuery<Ride> rideQuery = db
-					.createQuery("SELECT r FROM Ride r WHERE r.date > CURRENT_DATE AND r.active = true", Ride.class);
-			List<Ride> rides = rideQuery.getResultList();
-
-			for (Alert alert : alerts) {
-				boolean found = findAlerts(rides, alert);
-				alert.setFound(found);	
-				if (alert.isActive() && found)
-					alertFound = true;
-				db.merge(alert);
-		}
-
-			db.getTransaction().commit();
-			return alertFound;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
-	}
-	
+		 
 	public boolean findAlerts(List<Ride> rides, Alert alert) {
 		for (Ride ride : rides) {
 			if (UtilDate.datesAreEqualIgnoringTime(ride.getDate(), alert.getDate())

@@ -7,9 +7,11 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import businessLogic.BLFacade;
 import domain.Booking;
+import domain.ComplaintData;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -28,6 +30,7 @@ public class ErreklamazioakGUI extends JFrame {
 	private JLabel jLabelDeskripzioa;
 	private JLabel jLabelEmaitza;
 	private JButton jButtonBidali;
+	private JButton jButtonItxi; // New close button
 	private JTextArea jtextAreaDeskripzioa;
 
 	public static BLFacade getBusinessLogic() {
@@ -40,13 +43,12 @@ public class ErreklamazioakGUI extends JFrame {
 
 	public ErreklamazioakGUI(String nork, String nori, Booking booking) {
 		setBussinessLogic(LoginGUI.getBusinessLogic());
-
 		Date gaur = new Date();
 		this.getContentPane().setLayout(null);
-
 		this.setSize(new Dimension(400, 349));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("ErreklamazioakGUI.Erreklamazioa"));
 		this.setResizable(false);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // Ensure window disposes on close
 
 		jLabelErreklamazioIzenburua = new JLabel(
 				ResourceBundle.getBundle("Etiquetas").getString("ErreklamazioakGUI.HojaDeReclamaciones"));
@@ -92,17 +94,38 @@ public class ErreklamazioakGUI extends JFrame {
 
 		jButtonBidali = new JButton(
 				ResourceBundle.getBundle("Etiquetas").getString("ErreklamazioakGUI.ErreklamazioaBidali"));
-		jButtonBidali.setBounds(143, 276, 99, 25);
+		jButtonBidali.setBounds(80, 276, 99, 25);
 		getContentPane().add(jButtonBidali);
 		jButtonBidali.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String textua = jtextAreaDeskripzioa.getText();
 				if (!textua.isEmpty()) {
-					appFacadeInterface.erreklamazioaBidali(nork, nori, gaur, booking, textua, true);
-					jButtonClose_actionPerformed(e);
+					try {
+						ComplaintData complaint = new ComplaintData(nork, nori, gaur, booking, textua, true);
+						appFacadeInterface.erreklamazioaBidali(complaint);
+						jLabelEmaitza.setText(ResourceBundle.getBundle("Etiquetas").getString("ErreklamazioakGUI.BidalketaOngi"));
+						jtextAreaDeskripzioa.setText("");
+						jButtonBidali.setEnabled(false); // Prevent double send
+						// Optionally close after short delay
+						javax.swing.Timer timer = new javax.swing.Timer(1200, evt -> setVisible(false));
+						timer.setRepeats(false);
+						timer.start();
+					} catch (Exception ex) {
+						jLabelEmaitza.setText(ResourceBundle.getBundle("Etiquetas").getString("ErreklamazioakGUI.BidalketaErrorea"));
+					}
 				} else {
 					jLabelEmaitza.setText(ResourceBundle.getBundle("Etiquetas").getString("ErreklamazioakGUI.Error"));
 				}
+			}
+		});
+
+		// Add a Close button
+		jButtonItxi = new JButton(ResourceBundle.getBundle("Etiquetas").getString("Close"));
+		jButtonItxi.setBounds(220, 276, 99, 25);
+		getContentPane().add(jButtonItxi);
+		jButtonItxi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 			}
 		});
 	}

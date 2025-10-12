@@ -17,6 +17,7 @@ import domain.Car;
 import domain.Discount;
 import domain.Driver;
 import domain.Complaint;
+import domain.ComplaintData;
 import domain.Movement;
 import exceptions.RideMustBeLaterThanTodayException;
 import exceptions.RideAlreadyExistException;
@@ -317,9 +318,9 @@ public class BLFacadeImplementation implements BLFacade {
 	}
 
 	@Override
-	public boolean erreklamazioaBidali(String nor, String nori, Date gaur, Booking book, String textua, boolean aurk) {
+	public boolean erreklamazioaBidali(ComplaintData data) { 
 		dbManager.open();
-		boolean sent = dbManager.erreklamazioaBidali(nor, nori, gaur, book, textua, aurk);
+		boolean sent = dbManager.erreklamazioaBidali(data);
 		dbManager.close();
 		return sent;
 	}
