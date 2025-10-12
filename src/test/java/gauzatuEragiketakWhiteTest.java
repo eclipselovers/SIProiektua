@@ -1,4 +1,3 @@
-
 import static org.junit.Assert.assertFalse;
 
 
@@ -18,7 +17,7 @@ public class gauzatuEragiketakWhiteTest {
 	
 	public gauzatuEragiketakWhiteTest() {
 		db.open();
-		db.addDriver("Proba", "123456");
+		db.addUser("Proba", "123456", domain.Driver.class);
 		db.close();
 	}
 	

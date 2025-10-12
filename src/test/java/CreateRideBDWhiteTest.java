@@ -16,6 +16,7 @@ import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
 import testOperations.TestDataAccess;
 import domain.Driver;
+import businessLogic.RideRequest;
 
 public class CreateRideBDWhiteTest {
 
@@ -57,7 +58,8 @@ public class CreateRideBDWhiteTest {
 				
 				//invoke System Under Test (sut)  
 				sut.open();
-			    ride=sut.createRide(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+			    RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+			    ride=sut.createRide(req);
 
 				//verify the results
 				assertNull(ride);
@@ -103,7 +105,8 @@ public class CreateRideBDWhiteTest {
 			
 			//invoke System Under Test (sut)  
 			sut.open();
-		    Ride r=sut.createRide(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+		    Ride r=sut.createRide(req);
 			sut.close();
 			
 			assertNull(r);
@@ -152,7 +155,8 @@ public class CreateRideBDWhiteTest {
 			
 			//invoke System Under Test (sut)  
 			sut.open();
-		    sut.createRide(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+		    sut.createRide(req);
 			sut.close();
 			
 			fail();
@@ -204,7 +208,8 @@ public class CreateRideBDWhiteTest {
 			
 			//invoke System Under Test (sut)  
 			sut.open();
-			Ride ride=sut.createRide(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+		    Ride ride=sut.createRide(req);
 			
 			//if the program goes to this point fail
 			fail();
@@ -261,7 +266,8 @@ public class CreateRideBDWhiteTest {
 		try {
 			//invoke System Under Test (sut)  
 			sut.open();
-			 ride=sut.createRide(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 2, 10, driverUsername);
+		    ride=sut.createRide(req);
 			sut.close();			
 			
 			//verify the results

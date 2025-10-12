@@ -16,7 +16,7 @@ public class gauzatuEragiketakBlackTest {
 	
 	public gauzatuEragiketakBlackTest() {
 		db.open();
-		db.addDriver("Proba", "123456");
+		db.addUser("Proba", "123456", domain.Driver.class);
 		db.close();
 
 	}

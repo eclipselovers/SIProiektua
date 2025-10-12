@@ -79,11 +79,10 @@ public class BLFacadeImplementation implements BLFacade {
 	 * {@inheritDoc}
 	 */
 	@WebMethod
-	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverName)
+	public Ride createRide(RideRequest request)
 			throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
-
 		dbManager.open();
-		Ride ride = dbManager.createRide(from, to, date, nPlaces, price, driverName);
+		Ride ride = dbManager.createRide(request);
 		dbManager.close();
 		return ride;
 	};
@@ -184,19 +183,11 @@ public class BLFacadeImplementation implements BLFacade {
 	}
 
 	@Override
-	public boolean addDriver(String username, String password) {
+	public boolean addUser(String username, String password, Class<?> userType) {
 		dbManager.open();
-		boolean ondo = dbManager.addDriver(username, password);
+		boolean result = dbManager.addUser(username, password, userType);
 		dbManager.close();
-		return ondo;
-	}
-
-	@Override
-	public boolean addTraveler(String username, String password) {
-		dbManager.open();
-		boolean ondo = dbManager.addTraveler(username, password);
-		dbManager.close();
-		return ondo;
+		return result;
 	}
 
 	@Override

@@ -46,21 +46,15 @@ public interface BLFacade {
 
 	/**
 	 * This method creates a ride for a driver
-	 * 
-	 * @param from    the origin location of a ride
-	 * @param to      the destination location of a ride
-	 * @param date    the date of the ride
-	 * @param nPlaces available seats
-	 * @param kotxe
-	 * @param driver  to which ride is added
-	 * 
+	 *
+	 * @param request the ride request object
 	 * @return the created ride, or null, or an exception
 	 * @throws RideMustBeLaterThanTodayException if the ride date is before today
 	 * @throws RideAlreadyExistException         if the same ride already exists for
 	 *                                           the driver
 	 */
 	@WebMethod
-	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverName)
+	public Ride createRide(RideRequest request)
 			throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
 
 	/**
@@ -108,9 +102,7 @@ public interface BLFacade {
 
 	public String getMotaByUsername(String erab);
 
-	public boolean addDriver(String username, String password);
-
-	public boolean addTraveler(String username, String password);
+	public boolean addUser(String username, String password, Class<?> userType);
 
 	public boolean gauzatuEragiketa(String username, double amount, boolean b);
 

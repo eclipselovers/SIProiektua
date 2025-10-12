@@ -84,18 +84,18 @@ public class RegisterGUI extends JFrame {
                     jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Error"));
                     return;
                 }
-                boolean added=false;
+                boolean added = false;
                 if(userType.equals(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Driver")))
-                	added = appFacadeInterface.addDriver(username, password);
+                    added = appFacadeInterface.addUser(username, password, domain.Driver.class);
                 else if (userType.equals(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Traveler")))
-                	added = appFacadeInterface.addTraveler(username, password);
-                
+                    added = appFacadeInterface.addUser(username, password, domain.Traveler.class);
+
                 if (added) {
-                	jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Ondo"));
+                    jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Ondo"));
                     fieldUser.setText("");
                     fieldPass.setText("");
                 } else {
-                	jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Gaizki"));
+                    jLabelError.setText(ResourceBundle.getBundle("Etiquetas").getString("RegisterGUI.Gaizki"));
                 }
             }
         });

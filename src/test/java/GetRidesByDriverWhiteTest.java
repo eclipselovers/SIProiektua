@@ -1,4 +1,4 @@
-
+import businessLogic.RideRequest;
 import domain.Driver;
 import domain.Ride;
 
@@ -41,7 +41,8 @@ public class GetRidesByDriverWhiteTest {
 	public void test2() {
 		try {
 			db.open();
-			db.addDriver("Urtzii", "123");
+			// db.addDriver("Urtzii", "123");
+			db.addUser("Urtzii", "123", Driver.class);
 			
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
 			if (erantzuna.isEmpty() == true) {
@@ -64,11 +65,13 @@ public class GetRidesByDriverWhiteTest {
 	public void test3() {
 		try {
 			db.open();
-			db.addDriver("Urtzii", "123");
+			// db.addDriver("Urtzii", "123");
+			db.addUser("Urtzii", "123", Driver.class);
 			Calendar cal = Calendar.getInstance();
 			cal.set(2026, Calendar.MAY, 20);
 			Date date = UtilDate.trim(cal.getTime());
-			Ride ride = db.createRide("Donosti", "Bilbao", date, 4, 5, "Urtzii");
+			RideRequest req = new RideRequest("Donosti", "Bilbao", date, 4, 5, "Urtzii");
+			Ride ride = db.createRide(req);
 			ride.setActive(false);
 
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
@@ -95,11 +98,13 @@ public class GetRidesByDriverWhiteTest {
 	public void test4() {
 		try {
 			db.open();
-			db.addDriver("Urtzii", "123");
+			// db.addDriver("Urtzii", "123");
+			db.addUser("Urtzii", "123", Driver.class);
 			Calendar cal = Calendar.getInstance();
 			cal.set(2026, Calendar.MAY, 20);
 			Date date = UtilDate.trim(cal.getTime());
-			db.createRide("Donosti", "Bilbao", date, 4, 5, "Urtzii");
+			RideRequest req = new RideRequest("Donosti", "Bilbao", date, 4, 5, "Urtzii");
+			db.createRide(req);
 
 			List<Ride> erantzuna = db.getRidesByDriver("Urtzii");
 			

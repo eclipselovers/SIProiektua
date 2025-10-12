@@ -18,7 +18,7 @@ public class BookRideBDWhiteTest {
 	
 	public BookRideBDWhiteTest() {
 	      db.open();
-	      db.addTraveler("Traveler Test", "22456");
+	      db.addUser("Traveler Test", "22456", Traveler.class);
 	      db.close();
 	}
 	

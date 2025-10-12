@@ -25,12 +25,12 @@ public class getBookingFromDriverBlackTest {
 	}
 	@Before
 	public void setUp() {
-		db.addDriver("Driver", "123");
-		db.addDriver("Driver2", "123");
+		db.addUser("Driver", "123", Driver.class);
+		db.addUser("Driver2", "123", Driver.class);
 		Driver driver2 = db.getDriver("Driver2");
 		Ride rides = new Ride ("a","a", new Date(2025,10,20) ,231,2,driver2);
 		rides.setActive(false);
-		db.addDriver("Driver3", "123");
+		db.addUser("Driver3", "123", Driver.class);
 		Driver driver3 = db.getDriver("Driver3");
 		driver3.addRide("aas", "wefef", new Date(2025,2,20), 5, 5);
 		Traveler traveler = new Traveler("a", "a");

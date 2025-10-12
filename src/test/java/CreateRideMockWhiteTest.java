@@ -21,6 +21,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import businessLogic.RideRequest;
 import dataAccess.DataAccess;
 import domain.Driver;
 import domain.Ride;
@@ -87,7 +88,8 @@ public class CreateRideMockWhiteTest {
 				
 				//invoke System Under Test (sut)  
 				sut.open();
-				Ride ride=sut.createRide(rideFrom, rideTo, rideDate, 0, 0, driverUserName);
+				RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 0, 0, driverUserName);
+				Ride ride=sut.createRide(req);
 
 				//verify the results
 				assertNull(ride);
@@ -141,7 +143,8 @@ public class CreateRideMockWhiteTest {
 			
 	      //invoke System Under Test (sut)  
 			sut.open();
-		    Ride r=sut.createRide(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			Ride r=sut.createRide(req);
 			sut.close();
 			
 			assertNull(r);
@@ -185,7 +188,8 @@ public class CreateRideMockWhiteTest {
 				
 				//invoke System Under Test (sut)  
 				sut.open();
-				Ride ride=sut.createRide(rideFrom, rideTo, rideDate, 0, 0, driverUserName);
+				RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 0, 0, driverUserName);
+				Ride ride=sut.createRide(req);
 
 				//verify the results
 				assertNull(ride);
@@ -239,7 +243,8 @@ public class CreateRideMockWhiteTest {
 			
 			//invoke System Under Test (sut)  
 			sut.open();
-		    sut.createRide(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			sut.createRide(req);
 			sut.close();
 			
 			fail();
@@ -284,7 +289,8 @@ public class CreateRideMockWhiteTest {
 					
 			//invoke System Under Test (sut)  
 			sut.open();
-			Ride ride=sut.createRide(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			RideRequest req = new RideRequest(rideFrom, rideTo, rideDate, 0, 0, driverUsername);
+			Ride ride=sut.createRide(req);
 			sut.close();
 			//verify the results
 			assertNotNull(ride);
