@@ -45,16 +45,21 @@ public class Admin2 implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Admin2 other = (Admin2) obj;
-		if (username != other.username)
-			return false;
-		return true;
+	    if (!equalsClassCheck(obj)) return false;
+	    Admin2 other = (Admin2) obj;
+	    if (username != other.username)
+	        return false;
+	    return true;
+	}
+
+	private boolean equalsClassCheck(Object obj) {
+	    if (this == obj)
+	        return true;
+	    if (obj == null)
+	        return false;
+	    if (getClass() != obj.getClass())
+	        return false;
+	    return true;
 	}
 
 	public String getMota() {

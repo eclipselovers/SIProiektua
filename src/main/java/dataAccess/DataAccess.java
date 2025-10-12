@@ -746,36 +746,32 @@ public class DataAccess {
 	}
 
 	public void cancelRide(Ride ride) {
-		try {
-			db.getTransaction().begin();
+	    try {
+	        db.getTransaction().begin();
+	        for (Booking booking : ride.getBookings()) {
+	            if ("Accepted".equals(booking.getStatus()) || "NotDefined".equals(booking.getStatus()))
+	                kudeatuOnartutakoErreserba(booking);
+	            booking.setStatus("Rejected");
+	            db.merge(booking);
+	        }
+	        ride.setActive(false);
+	        db.merge(ride);
+	        db.getTransaction().commit();
+	    } catch (Exception e) {
+	        if (db.getTransaction().isActive()) db.getTransaction().rollback();
+	        e.printStackTrace();
+	    }
+	}
 
-			for (Booking booking : ride.getBookings()) {
-				if (booking.getStatus().equals("Accepted") || booking.getStatus().equals("NotDefined")) {
-					double price = booking.prezioaKalkulatu();
-					Traveler traveler = booking.getTraveler();
-					double frozenMoney = traveler.getIzoztatutakoDirua();
-					traveler.setIzoztatutakoDirua(frozenMoney - price);
-
-					double money = traveler.getMoney();
-					traveler.setMoney(money + price);
-					db.merge(traveler);
-					db.getTransaction().commit();
-					addMovement(traveler, "BookDeny", price);
-					db.getTransaction().begin();
-				}
-				booking.setStatus("Rejected");
-				db.merge(booking);
-			}
-			ride.setActive(false);
-			db.merge(ride);
-
-			db.getTransaction().commit();
-		} catch (Exception e) {
-			if (db.getTransaction().isActive()) {
-				db.getTransaction().rollback();
-			}
-			e.printStackTrace();
-		}
+	private void kudeatuOnartutakoErreserba(Booking booking) {
+	    double price = booking.prezioaKalkulatu();
+	    Traveler traveler = booking.getTraveler();
+	    traveler.setIzoztatutakoDirua(traveler.getIzoztatutakoDirua() - price);
+	    traveler.setMoney(traveler.getMoney() + price);
+	    db.merge(traveler);
+	    db.getTransaction().commit();
+	    addMovement(traveler, "BookDeny", price);
+	    db.getTransaction().begin();
 	}
 
 	public List<Ride> getRidesByDriver(String username) {
@@ -866,15 +862,25 @@ public class DataAccess {
 		}
 	}
 
-	public void createDiscount(Discount di) {
-		try {
-			db.getTransaction().begin();
-			db.persist(di);
-			db.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-		}
+	private boolean persistEntity(Object entity) {
+	    try {
+	        db.getTransaction().begin();
+	        db.persist(entity);
+	        db.getTransaction().commit();
+	        return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        if (db.getTransaction().isActive()) db.getTransaction().rollback();
+	        return false;
+	    }
+	}
+
+	public boolean createDiscount(Discount di) {
+	    return persistEntity(di);
+	}
+
+	public boolean createAlert(Alert alert) {
+	    return persistEntity(alert);
 	}
 
 	public List<Discount> getAllDiscounts() {
@@ -1072,19 +1078,6 @@ public class DataAccess {
 			}
 		}	
 		return false;
-	}
-
-	public boolean createAlert(Alert alert) {
-		try {
-			db.getTransaction().begin();
-			db.persist(alert);
-			db.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			db.getTransaction().rollback();
-			return false;
-		}
 	}
 
 	public boolean deleteAlert(int alertNumber) {
