@@ -76,7 +76,7 @@ static DataAccess sut;
 	User user = new User("Proba", "123456", "Driver");
 	
 
-	/*@Test
+	@Test
 	public void test1() {
 	
 		boolean r = false;
@@ -145,7 +145,7 @@ static DataAccess sut;
 		}catch(Exception e1) {
 			fail();
 		}
-	}*/
+	}
 	
 	
 }
