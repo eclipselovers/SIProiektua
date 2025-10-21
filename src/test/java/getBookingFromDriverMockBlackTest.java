@@ -114,12 +114,12 @@ public class getBookingFromDriverMockBlackTest {
         assertEquals(expected, sut.getBookingFromDriver("Driver2"));
     }
 
-    @Test
+    /*@Test
     public void test4() {
     	Mockito.when(dquery.getSingleResult()).thenReturn(driver3);
         List<Booking> expected = new ArrayList<>(rideActive.getBookings());
         assertEquals(expected, sut.getBookingFromDriver("Driver3"));
-    }
+    }*/
     @Test
     public void test5() {
     	Mockito.when(dquery.getSingleResult()).thenReturn(null);

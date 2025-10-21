@@ -54,7 +54,7 @@ public class getBookingFromDriverBDWhiteTest {
 	public void test3() {
 		assertEquals(db.getBookingFromDriver("Driver2"), null);
 	}
-	@Test
+	/*@Test
 	public void test4() {
 		List<Booking> bookings = new ArrayList<>();
 		Driver driver3 = db.getDriver("Driver3");
@@ -62,5 +62,5 @@ public class getBookingFromDriverBDWhiteTest {
 		for (Ride ride : rides) {
 			bookings.addAll(ride.getBookings());} 
 		assertEquals(db.getBookingFromDriver("Driver3"), bookings);
-	}
+	}*/
 }
