@@ -1,6 +1,8 @@
 package iterator;
 
 import businessLogic.BLFacade;
+import businessLogic.BLFactory;
+import configuration.ConfigXML;
 
 public class IteratorProba {
 
