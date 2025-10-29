@@ -1,6 +1,7 @@
 package businessLogic;
 
 import java.util.Date;
+
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -20,6 +21,8 @@ import domain.Complaint;
 import domain.ComplaintData;
 import domain.Movement;
 import exceptions.RideMustBeLaterThanTodayException;
+import iterator.DepartingCitiesIterator;
+import iterator.ExtendedIterator;
 import exceptions.RideAlreadyExistException;
 
 /**
@@ -61,6 +64,8 @@ public class BLFacadeImplementation implements BLFacade {
 		return departLocations;
 
 	}
+	
+	
 
 	/**
 	 * {@inheritDoc}
@@ -445,6 +450,13 @@ public class BLFacadeImplementation implements BLFacade {
 		Complaint er = dbManager.getComplaintsByBook(book);
 		dbManager.close();
 		return er;
+	}
+
+	@Override
+	public ExtendedIterator<String> getDepartingCitiesIterator() {
+		
+		ExtendedIterator<String> it = new DepartingCitiesIterator(this.getDepartCities());
+		return it;
 	}
 
 }

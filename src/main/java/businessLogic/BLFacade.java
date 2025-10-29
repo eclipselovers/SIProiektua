@@ -16,6 +16,7 @@ import domain.Complaint;
 import domain.ComplaintData;
 import domain.Movement;
 import exceptions.RideMustBeLaterThanTodayException;
+import iterator.ExtendedIterator;
 import exceptions.RideAlreadyExistException;
 
 import javax.jws.WebMethod;
@@ -58,6 +59,9 @@ public interface BLFacade {
 	public Ride createRide(RideRequest request)
 			throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
 
+	
+	@WebMethod
+	public ExtendedIterator<String> getDepartingCitiesIterator();
 	/**
 	 * This method retrieves the rides from two locations on a given date
 	 * 
