@@ -11,24 +11,27 @@ public class DepartingCitiesIterator implements ExtendedIterator<String> {
 
 	@Override
 	public boolean hasNext() {
-		return position < cities.size() - 1;
+		return position < cities.size();
 	}
 
 	@Override
 	public String next() {
+		String city = cities.get(position);
 		position++;
-		return cities.get(position);
+		return city;
 	}
 
 	@Override
 	public String previous() {
+		String city = cities.get(position);
 		position--;
-		return cities.get(position);
+		return city;
+		
 	}
 
 	@Override
 	public boolean hasPrevious() {
-		return position > 0;
+		return position >= 0;
 	}
 
 	@Override
@@ -38,7 +41,7 @@ public class DepartingCitiesIterator implements ExtendedIterator<String> {
 
 	@Override
 	public void goLast() {
-		position = cities.size() - 1;
+		position = cities.size()-1;
 	}
 
 }
